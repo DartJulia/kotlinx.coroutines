@@ -87,8 +87,8 @@ public final class kotlinx/coroutines/CancellableContinuationKt {
 }
 
 public final class kotlinx/coroutines/CancellationPointKt {
-	public static final fun runInterruptible (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function0;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun runInterruptible$default (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function0;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun runInterruptible (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun runInterruptible$default (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public abstract interface class kotlinx/coroutines/ChildHandle : kotlinx/coroutines/DisposableHandle {
@@ -106,6 +106,9 @@ public final class kotlinx/coroutines/ChildJob$DefaultImpls {
 	public static fun minusKey (Lkotlinx/coroutines/ChildJob;Lkotlin/coroutines/CoroutineContext$Key;)Lkotlin/coroutines/CoroutineContext;
 	public static fun plus (Lkotlinx/coroutines/ChildJob;Lkotlin/coroutines/CoroutineContext;)Lkotlin/coroutines/CoroutineContext;
 	public static fun plus (Lkotlinx/coroutines/ChildJob;Lkotlinx/coroutines/Job;)Lkotlinx/coroutines/Job;
+}
+
+public abstract interface class kotlinx/coroutines/CodeScope {
 }
 
 public abstract interface class kotlinx/coroutines/CompletableDeferred : kotlinx/coroutines/Deferred {
@@ -207,7 +210,7 @@ public final class kotlinx/coroutines/CoroutineName : kotlin/coroutines/Abstract
 public final class kotlinx/coroutines/CoroutineName$Key : kotlin/coroutines/CoroutineContext$Key {
 }
 
-public abstract interface class kotlinx/coroutines/CoroutineScope {
+public abstract interface class kotlinx/coroutines/CoroutineScope : kotlinx/coroutines/CodeScope {
 	public abstract fun getCoroutineContext ()Lkotlin/coroutines/CoroutineContext;
 }
 
@@ -331,6 +334,9 @@ public final class kotlinx/coroutines/GlobalScope : kotlinx/coroutines/Coroutine
 }
 
 public abstract interface annotation class kotlinx/coroutines/InternalCoroutinesApi : java/lang/annotation/Annotation {
+}
+
+public abstract interface class kotlinx/coroutines/InterruptibleScope : kotlinx/coroutines/CodeScope {
 }
 
 public abstract interface class kotlinx/coroutines/Job : kotlin/coroutines/CoroutineContext$Element {

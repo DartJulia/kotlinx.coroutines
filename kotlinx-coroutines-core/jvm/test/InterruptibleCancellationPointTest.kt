@@ -8,7 +8,11 @@ import java.io.IOException
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
+import kotlin.test.fail
+import kotlin.test.Test
 
 class InterruptibleCancellationPointTest: TestBase() {
 
@@ -162,6 +166,20 @@ class InterruptibleCancellationPointTest: TestBase() {
             assertFalse(interruptLeak.get())
             assertEquals(enterCount.get(), interruptedCount.get())
             assertEquals(0, otherExceptionCount.get())
+        }
+    }
+
+    @Test
+    fun testCodeScopeDsl() {
+        runBlocking {
+            with("OtherScope") {
+                runInterruptible {
+                    doSomethingUsefulBlocking(1, 0) // works as normal
+
+                    // launch {} // using outer code scopes, won't compile.
+                    substring(0) // using other outer scopes, works as normal
+                }
+            }
         }
     }
 

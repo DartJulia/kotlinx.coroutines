@@ -59,7 +59,7 @@ import kotlin.coroutines.intrinsics.*
  * }
  * ```
  */
-public interface CoroutineScope {
+public interface CoroutineScope: CodeScope {
     /**
      * The context of this scope.
      * Context is encapsulated by the scope and used for implementation of coroutine builders that are extensions on the scope.

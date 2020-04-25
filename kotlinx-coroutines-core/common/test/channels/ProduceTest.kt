@@ -151,7 +151,7 @@ class ProduceTest : TestBase() {
             launch {
                 expect(2)
                 assertFailsWith<IllegalStateException> {
-                    awaitClose { expectUnreached() }
+                    awaitClose { expectUnreached() } // <- access outer ProducerScope from launch scope, won't compile
                     expectUnreached()
                 }
             }

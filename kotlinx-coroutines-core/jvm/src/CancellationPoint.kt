@@ -51,7 +51,7 @@ import kotlin.coroutines.intrinsics.suspendCoroutineUninterceptedOrReturn
  */
 public suspend fun <T> runInterruptible(
         context: CoroutineContext = EmptyCoroutineContext,
-        block: () -> T
+        block: InterruptibleScope.() -> T
 ): T {
     // fast path: empty context
     if (context === EmptyCoroutineContext) { return runInterruptibleInExpectedContext(block) }
@@ -59,15 +59,23 @@ public suspend fun <T> runInterruptible(
     return withContext(context) { runInterruptibleInExpectedContext(block) }
 }
 
-private suspend fun <T> runInterruptibleInExpectedContext(block: () -> T): T =
+/**
+ * Defines a scope for new interruptible blocking code blocks.
+ *
+ * Currently, The main goal is to restrict access to outer code scope methods (using outer scopes as
+ * implicit receivers). See [CodeScope] for details.
+ */
+public interface InterruptibleScope: CodeScope
+
+private suspend fun <T> runInterruptibleInExpectedContext(block: InterruptibleScope.() -> T): T =
         suspendCoroutineUninterceptedOrReturn sc@{ uCont ->
             try {
                 // fast path: no job
-                val job = uCont.context[Job] ?: return@sc block()
+                val job = uCont.context[Job] ?: return@sc DefaultInterruptibleScope.block()
                 // slow path
                 val threadState = ThreadState().apply { initInterrupt(job) }
                 try {
-                    block()
+                    DefaultInterruptibleScope.block()
                 } finally {
                     threadState.clearInterrupt()
                 }
@@ -75,6 +83,8 @@ private suspend fun <T> runInterruptibleInExpectedContext(block: () -> T): T =
                 throw CancellationException()
             }
         }
+
+private object DefaultInterruptibleScope : InterruptibleScope
 
 private class ThreadState {
 
